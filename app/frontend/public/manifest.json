@@ -1,0 +1,50 @@
+{
+  "name": "BalloonPricer",
+  "short_name": "BalloonPricer",
+  "description": "Professional balloon design pricing calculator",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFCF5",
+  "theme_color": "#D4A017",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://mgx-backend-cdn.metadl.com/generate/images/1082475/2026-04-03/0ca48fb5-d33b-4751-87e4-8f1b8383377d.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://mgx-backend-cdn.metadl.com/generate/images/1082475/2026-04-03/5349407a-a234-4732-9
+
+Now I'll create the manifest.json and update index.html with proper PWA meta tags for "Add to Home Screen" support.
+
+<Editor.write>
+<path>
+/workspace/app/frontend/public/manifest.json
+</path>
+<content>
+{
+  "name": "BalloonPricer",
+  "short_name": "BalloonPricer",
+  "description": "Professional balloon design pricing calculator",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFCF5",
+  "theme_color": "#D4A017",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://mgx-backend-cdn.metadl.com/generate/images/1082475/2026-04-03/0ca48fb5-d33b-4751-87e4-8f1b8383377d.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://mgx-backend-cdn.metadl.com/generate/images/1082475/2026-04-03/5349407a-a234-4732-9bc8-bdc44abf484c.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

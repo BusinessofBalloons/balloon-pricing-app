@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 43 100% 98%;
+    --foreground: 36 60% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 36 60% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 36 60% 10%;
+
+    --primary: 43 75% 46%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 43 60% 90%;
+    --secondary-foreground: 36 60% 10%;
+
+    --muted: 43 30% 94%;
+    --muted-foreground: 36 20% 40%;
+
+    --accent: 43 80% 58%;
+    --accent-foreground: 36 60% 10%;
+
+    --destructive: 4 80% 56%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 43 30% 85%;
+    --input: 43 30% 85%;
+    --ring: 43 75% 46%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Golden Honey custom utilities */
+.golden-gradient {
+  background: linear-gradient(135deg, #D4A017 0%, #E8C547 50%, #D4A017 100%);
+}
+
+.golden-text {
+  background: linear-gradient(135deg, #D4A017, #E8C547);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mobile-optimized touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* PWA standalone mode - safe area insets for notched devices */
+@supports (padding: env(safe-area-inset-top)) {
+  .pwa-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pwa-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Standalone mode adjustments */
+@media all and (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  /* Allow text selection in inputs and textareas */
+  input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Prevent pull-to-refresh in standalone mode */
+html {
+  overscroll-behavior: none;
+}
+
+/* Ensure number input spinners are visible on mobile */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: inner-spin-button;
+  opacity: 1;
+  height: auto;
+}
+
+/* Larger touch targets for mobile buttons */
+@media (max-width: 640px) {
+  .touch-target-sm {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* Hide platform-injected elements outside our app root, but preserve Radix UI portals */
+body > *:not(#root):not(script):not(link):not(style):not(noscript):not([data-radix-portal]):not([data-radix-popper-content-wrapper]):not([role="dialog"]):not([data-state]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+}
+
+/* Also target any fixed/sticky positioned elements outside #root, but preserve Radix portals */
+body > div:not(#root):not([data-radix-portal]):not([data-radix-popper-content-wrapper]):not([role="dialog"]):not([data-state]),
+body > section:not(#root),
+body > aside:not(#root),
+body > footer:not(#root),
+body > nav:not(#root),
+body > header:not(#root) {
+  display: none !important;
+}
+
+/* Ensure our app's bottom nav is always on top */
+#root {
+  position: relative;
+  z-index: 1;
+}

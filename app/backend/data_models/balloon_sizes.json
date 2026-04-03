@@ -1,0 +1,36 @@
+{
+    "title": "balloon_sizes",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "User ID"
+        },
+        "size_name": {
+            "type": "string",
+            "description": "Name of the balloon size or item"
+        },
+        "price_per_balloon": {
+            "type": "number",
+            "description": "Price per unit"
+        },
+        "sort_order": {
+            "type": "integer",
+            "description": "Display sort order"
+        },
+        "created_at": {
+            "type": "string",
+            "description": "Creation timestamp"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "size_name",
+        "price_per_balloon"
+    ]
+}
