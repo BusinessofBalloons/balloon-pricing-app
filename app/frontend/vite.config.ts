@@ -1,13 +1,12 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://balloon-backend-jyo1.onrender.com",
-        changeOrigin: true,
-        secure: true,
-      },
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 })
