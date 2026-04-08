@@ -126,22 +126,23 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
             continue
 
         # Check for router variable names: router and admin_router
-        for attr_name in ("router", "admin_router"):
-            if not hasattr(module, attr_name):
-                continue
+     for attr_name in ("router", "admin_router"):
+    if not hasattr(module, attr_name):
+        continue
 
-            attr = getattr(module, attr_name)
+    attr = getattr(module, attr_name)
 
-            if isinstance(attr, APIRouter):
-                app.include_router(attr)
+    if isinstance(attr, APIRouter):
+        app.include_router(attr, prefix="/api/v1")
+        discovered += 1
+        logger.info("Included router: %s.%s", module_name, attr_name)
+
+    elif isinstance(attr, (list, tuple)):
+        for idx, item in enumerate(attr):
+            if isinstance(item, APIRouter):
+                app.include_router(item, prefix="/api/v1")
                 discovered += 1
-                logger.info("Included router: %s.%s", module_name, attr_name)
-            elif isinstance(attr, (list, tuple)):
-                for idx, item in enumerate(attr):
-                    if isinstance(item, APIRouter):
-                        app.include_router(settings_router, prefix="/api/v1/settings")
-                        discovered += 1
-                        logger.info("Included router from list: %s.%s[%d]", module_name, attr_name, idx)
+                logger.info("Included router from list: %s.%s[%d]", module_name, attr_name, idx)
 
     if discovered == 0:
         logger.debug("No routers discovered in package '%s'", package_name)
