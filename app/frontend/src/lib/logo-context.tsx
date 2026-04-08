@@ -17,7 +17,7 @@ export function LogoProvider({ children }: { children: ReactNode }) {
   const refreshLogo = useCallback(async () => {
     try {
       // Adjust this endpoint to match your FastAPI route
-      const response = await client.get('/api/v1/settings/logo');
+      const response = await client.get('/settings/logo');
 
       if (response.data?.logo_url) {
         setLogoUrl(response.data.logo_url);
