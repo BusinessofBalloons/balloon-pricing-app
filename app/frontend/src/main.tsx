@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import React from 'react';
+import App from './App';
 import './index.css';
-import { loadRuntimeConfig } from './lib/config.ts';
 
 // Check if an element is a Radix UI portal (used by Select, Dialog, Popover, etc.)
 function isRadixPortal(el: HTMLElement): boolean {
@@ -19,6 +19,7 @@ function isRadixPortal(el: HTMLElement): boolean {
 function removePlatformOverlays() {
   const body = document.body;
   const children = Array.from(body.children);
+
   children.forEach((child) => {
     if (
       child.id !== 'root' &&
@@ -40,7 +41,7 @@ function removePlatformOverlays() {
   });
 }
 
-// Watch for dynamically injected elements and hide them immediately (but skip Radix portals)
+// Watch for dynamically injected elements and hide them immediately
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
     for (const node of Array.from(mutation.addedNodes)) {
@@ -68,7 +69,7 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, { childList: true });
 
-// Also run cleanup on load and after a delay (for late-injected elements)
+// Cleanup on load
 removePlatformOverlays();
 window.addEventListener('DOMContentLoaded', removePlatformOverlays);
 window.addEventListener('load', () => {
@@ -78,7 +79,7 @@ window.addEventListener('load', () => {
   setTimeout(removePlatformOverlays, 3000);
 });
 
-// Handle browser back button: redirect to external site instead of atoms.dev
+// Handle browser back button redirect
 function setupBackButtonRedirect() {
   window.addEventListener('popstate', () => {
     window.location.href = 'https://Balloonman.fun/bizofballoons';
@@ -91,17 +92,12 @@ function setupBackButtonRedirect() {
 
 setupBackButtonRedirect();
 
-// Load runtime configuration before rendering the app
-async function initializeApp() {
-  try {
-    await loadRuntimeConfig();
-    console.log('Runtime configuration loaded successfully');
-  } catch (error) {
-    console.warn(
-      'Failed to load runtime configuration, using defaults:',
-      error
-    );
-  }
+// Render app
+createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
   // Render the app
   createRoot(document.getElementById('root')!).render(<App />);
