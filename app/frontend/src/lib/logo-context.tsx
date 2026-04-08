@@ -16,8 +16,7 @@ export function LogoProvider({ children }: { children: ReactNode }) {
 
  const refreshLogo = useCallback(async () => {
   try {
-    const response = await client.get('/settings');
-
+ const response = await client.get('/admin/settings');
     console.log("Settings response:", response.data);
 
     const logoValue =
