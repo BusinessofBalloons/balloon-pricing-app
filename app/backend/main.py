@@ -139,7 +139,7 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
             elif isinstance(attr, (list, tuple)):
                 for idx, item in enumerate(attr):
                     if isinstance(item, APIRouter):
-                        app.include_router(item)
+                        app.include_router(settings_router, prefix="/api/v1/settings")
                         discovered += 1
                         logger.info("Included router from list: %s.%s[%d]", module_name, attr_name, idx)
 
