@@ -31,13 +31,16 @@ export function useAuth() {
   }, []);
 
   const login = async () => {
-    await client.auth.toLogin();
-  };
+  setUser({
+    id: "1",
+    email: "admin@local",
+    name: "Admin"
+  });
+};
 
-  const logout = async () => {
-    await client.auth.logout();
-    setUser(null);
-  };
+ const logout = async () => {
+  setUser(null);
+};
 
   return { user, loading, login, logout, refetch: checkAuth };
 }
