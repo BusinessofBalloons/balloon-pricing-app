@@ -100,53 +100,46 @@ app.add_middleware(
 
 # Auto-discover and include all routers from the local `routers` package
 def include_routers_from_package(app: FastAPI, package_name: str = "routers") -> None:
-    """Discover and include all APIRouter objects from a package.
-
-    This scans the given package (and subpackages) for module-level variables that
-    are instances of FastAPI's APIRouter. It supports "router", "admin_router" names.
-    """
-
     logger = logging.getLogger(__name__)
 
     try:
         pkg = importlib.import_module(package_name)
-    except Exception as exc:  # pragma: no cover - defensive logging
+    except Exception as exc:
         logger.debug("Routers package '%s' not loaded: %s", package_name, exc)
         return
 
-    discovered: int = 0
-    for _finder, module_name, is_pkg in pkgutil.walk_packages(pkg.__path__, pkg.__name__ + "."):
-        # Only import leaf modules; subpackages will be walked automatically
+    discovered = 0
+
+    for _, module_name, is_pkg in pkgutil.walk_packages(pkg.__path__, pkg.__name__ + "."):
         if is_pkg:
             continue
+
         try:
             module = importlib.import_module(module_name)
-        except Exception as exc:  # pragma: no cover - defensive logging
+        except Exception as exc:
             logger.warning("Failed to import module '%s': %s", module_name, exc)
             continue
 
-        # Check for router variable names: router and admin_router
-     for attr_name in ("router", "admin_router"):
-    if not hasattr(module, attr_name):
-        continue
+        for attr_name in ("router", "admin_router"):
+            if not hasattr(module, attr_name):
+                continue
 
-    attr = getattr(module, attr_name)
+            attr = getattr(module, attr_name)
 
-    if isinstance(attr, APIRouter):
-        app.include_router(attr, prefix="/api/v1")
-        discovered += 1
-        logger.info("Included router: %s.%s", module_name, attr_name)
-
-    elif isinstance(attr, (list, tuple)):
-        for idx, item in enumerate(attr):
-            if isinstance(item, APIRouter):
-                app.include_router(item, prefix="/api/v1")
+            if isinstance(attr, APIRouter):
+                app.include_router(attr)
                 discovered += 1
-                logger.info("Included router from list: %s.%s[%d]", module_name, attr_name, idx)
+                logger.info("Included router: %s.%s", module_name, attr_name)
+
+            elif isinstance(attr, (list, tuple)):
+                for idx, item in enumerate(attr):
+                    if isinstance(item, APIRouter):
+                        app.include_router(item)
+                        discovered += 1
+                        logger.info("Included router from list: %s.%s[%d]", module_name, attr_name, idx)
 
     if discovered == 0:
         logger.debug("No routers discovered in package '%s'", package_name)
-
 
 # Setup logging before router discovery
 setup_logging()
