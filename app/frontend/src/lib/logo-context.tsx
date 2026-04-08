@@ -14,22 +14,26 @@ const LogoContext = createContext<LogoContextType>({
 export function LogoProvider({ children }: { children: ReactNode }) {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
-  const refreshLogo = useCallback(async () => {
-    try {
-      // Adjust this endpoint to match your FastAPI route
-      const response = await client.get('/settings/logo');
+ const refreshLogo = useCallback(async () => {
+  try {
+    const response = await client.get('/settings');
 
-      if (response.data?.logo_url) {
-        setLogoUrl(response.data.logo_url);
-      } else {
-        setLogoUrl(null);
-      }
-    } catch (err) {
-      console.error('Failed to load logo:', err);
+    console.log("Settings response:", response.data);
+
+    const logoValue =
+      response.data?.backend_vars?.balloon_settings?.value;
+
+    if (logoValue) {
+      setLogoUrl(logoValue);
+    } else {
       setLogoUrl(null);
     }
-  }, []);
-
+  } catch (err) {
+    console.error('Failed to load logo:', err);
+    setLogoUrl(null);
+  }
+}, []);
+  
   useEffect(() => {
     refreshLogo();
   }, [refreshLogo]);
