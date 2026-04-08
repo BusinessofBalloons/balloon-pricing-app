@@ -239,9 +239,12 @@ if __name__ == "__main__":
         run_in_debug_mode(app)
     else:
         # Enable reload in normal mode
-        uvicorn.run(
-            app,
-            host="0.0.0.0",
-            port=int(settings.port),
-            reload_excludes=["**/*.py"],
-        )
+        import os
+import uvicorn
+
+uvicorn.run(
+    app,
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 10000)),
+)
+  
