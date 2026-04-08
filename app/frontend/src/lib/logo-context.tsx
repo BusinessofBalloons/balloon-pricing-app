@@ -16,26 +16,17 @@ export function LogoProvider({ children }: { children: ReactNode }) {
 
   const refreshLogo = useCallback(async () => {
     try {
-      const settingsRes = await client.entities.balloon_settings.query({
-        query: {},
-        limit: 1,
-      });
-      if (settingsRes?.data?.items?.length > 0) {
-        const objectKey = settingsRes.data.items[0].logo_object_key;
-        if (objectKey) {
-          const downloadRes = await client.storage.getDownloadUrl({
-            bucket_name: 'logos',
-            object_key: objectKey,
-          });
-          if (downloadRes?.data?.download_url) {
-            setLogoUrl(downloadRes.data.download_url);
-          }
-        } else {
-          setLogoUrl(null);
-        }
+      // Adjust this endpoint to match your FastAPI route
+      const response = await client.get('/settings/logo');
+
+      if (response.data?.logo_url) {
+        setLogoUrl(response.data.logo_url);
+      } else {
+        setLogoUrl(null);
       }
     } catch (err) {
       console.error('Failed to load logo:', err);
+      setLogoUrl(null);
     }
   }, []);
 
