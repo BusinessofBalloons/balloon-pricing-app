@@ -98,10 +98,3 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>
 );
-
-  // Render the app
-  createRoot(document.getElementById('root')!).render(<App />);
-}
-
-// Initialize the app
-initializeApp();
