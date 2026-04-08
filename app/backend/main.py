@@ -226,25 +226,3 @@ def run_in_debug_mode(app: FastAPI):
     asyncio.run(server.serve())
 
 
-if __name__ == "__main__":
-    import sys
-
-    import uvicorn
-
-    # Detect if running in debugger (PyCharm, VS Code, etc.)
-    # Debuggers patch asyncio which conflicts with uvicorn's asyncio_run
-    is_debugging = "pydevd" in sys.modules or (hasattr(sys, "gettrace") and sys.gettrace() is not None)
-
-    if is_debugging:
-        run_in_debug_mode(app)
-    else:
-        # Enable reload in normal mode
-        import os
-import uvicorn
-
-uvicorn.run(
-    app,
-    host="0.0.0.0",
-    port=int(os.environ.get("PORT", 10000)),
-)
-  
