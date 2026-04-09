@@ -98,7 +98,7 @@ app.add_middleware(
 
 
 # Auto-discover and include all routers from the local `routers` package
-def include_routers_from_package(app: FastAPI, package_name: str = "routers") -> None:
+def include_routers_from_package(app, "routers") -> None:
     logger = logging.getLogger(__name__)
 
     try:
