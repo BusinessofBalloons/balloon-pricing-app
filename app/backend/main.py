@@ -107,29 +107,39 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
         logger.debug("Routers package '%s' not loaded: %s", package_name, exc)
         return
 
-    discovered = 0
-for _, module_name, is_pkg in pkgutil.walk_packages(
-    pkg.__path__, pkg.__name__ + "."
-):
-    if is_pkg:
-        continue
+def include_routers_from_package(app: FastAPI, package_name: str = "routers") -> None:
+    logger = logging.getLogger(__name__)
 
     try:
-        module = importlib.import_module(module_name)
+        pkg = importlib.import_module(package_name)
     except Exception as exc:
-        logger.warning("Failed to import module '%s': %s", module_name, exc)
-        continue
+        logger.debug("Routers package '%s' not loaded: %s", package_name, exc)
+        return
 
-    for attr_name in ("router", "admin_router"):
-        if not hasattr(module, attr_name):
+    discovered = 0
+
+    for _, module_name, is_pkg in pkgutil.walk_packages(
+        pkg.__path__, pkg.__name__ + "."
+    ):
+        if is_pkg:
             continue
 
-        attr = getattr(module, attr_name)
+        try:
+            module = importlib.import_module(module_name)
+        except Exception as exc:
+            logger.warning("Failed to import module '%s': %s", module_name, exc)
+            continue
 
-        if isinstance(attr, APIRouter):
-            app.include_router(attr)
-            discovered += 1
-            logger.info("Included router: %s.%s", module_name, attr_name)
+        for attr_name in ("router", "admin_router"):
+            if not hasattr(module, attr_name):
+                continue
+
+            attr = getattr(module, attr_name)
+
+            if isinstance(attr, APIRouter):
+                app.include_router(attr)
+                discovered += 1
+                logger.info("Included router: %s.%s", module_name, attr_name)
     if discovered == 0:
         logger.debug("No routers discovered in package '%s'", package_name)
 
