@@ -83,11 +83,11 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
     logger = logging.getLogger(__name__)
 
     try:
-        pkg = importlib.import_module(package_name)
-    except Exception as exc:
-        logger.debug("Routers package '%s' not loaded: %s", package_name, exc)
-        return
-
+    pkg = importlib.import_module(package_name)
+    logger.info("PACKAGE IMPORTED: %s", package_name)
+except Exception as exc:
+    logger.error("FAILED TO IMPORT PACKAGE %s: %s", package_name, exc)
+    return
     for _, module_name, is_pkg in pkgutil.walk_packages(
         pkg.__path__, pkg.__name__ + "."
     ):
