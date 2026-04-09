@@ -103,8 +103,7 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
 
         if hasattr(module, "router"):
             app.include_router(module.router)
-logger.info("Included router: %s.router", module_name)
-
+            logger.info("Included router: %s.router", module_name)
 setup_logging()
 include_routers_from_package(app, "routers")
 
