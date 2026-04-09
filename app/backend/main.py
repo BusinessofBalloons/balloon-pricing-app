@@ -142,7 +142,7 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
 
 # Setup logging before router discovery
 setup_logging()
-include_routers_from_package(app, "app.backend.routers")
+include_routers_from_package(app, "backend.routers")
 
 # Add exception handler for all exceptions except HTTPException
 @app.exception_handler(Exception)
