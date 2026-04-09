@@ -79,7 +79,6 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-
 def include_routers_from_package(app: FastAPI, package_name: str = "routers") -> None:
     logger = logging.getLogger(__name__)
 
@@ -92,6 +91,8 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
     for _, module_name, is_pkg in pkgutil.walk_packages(
         pkg.__path__, pkg.__name__ + "."
     ):
+        logger.info("DISCOVERED: %s", module_name)
+
         if is_pkg:
             continue
 
