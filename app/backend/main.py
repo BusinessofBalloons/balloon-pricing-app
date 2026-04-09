@@ -1,19 +1,20 @@
-import importlib
 import logging
 import os
-import pkgutil
 import traceback
 from contextlib import asynccontextmanager
 from datetime import datetime
 
 from core.config import settings
-from fastapi import FastAPI, HTTPException, Request, status, APIRouter
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from services.database import initialize_database, close_database
 from services.mock_data import initialize_mock_data
 from services.auth import initialize_admin_user
+
+# ✅ Direct router imports (no discovery)
+from routers.auth import router as auth_router
 
 
 def setup_logging():
@@ -79,34 +80,10 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-def include_routers_from_package(app: FastAPI, package_name: str = "routers") -> None:
-    logger = logging.getLogger(__name__)
+# ✅ Explicit router registration
+app.include_router(auth_router)
 
-try:
-    pkg = importlib.import_module(package_name)
-    logger.info("PACKAGE IMPORTED: %s", package_name)
-except Exception as exc:
-    logger.error("FAILED TO IMPORT PACKAGE %s: %s", package_name, exc)
-    return
-    for _, module_name, is_pkg in pkgutil.walk_packages(
-        pkg.__path__, pkg.__name__ + "."
-    ):
-        logger.info("DISCOVERED: %s", module_name)
-
-        if is_pkg:
-            continue
-
-        try:
-            module = importlib.import_module(module_name)
-        except Exception as exc:
-            logger.warning("Failed to import module '%s': %s", module_name, exc)
-            continue
-
-        if hasattr(module, "router"):
-            app.include_router(module.router)
-            logger.info("Included router: %s.router", module_name)
 setup_logging()
-include_routers_from_package(app, "app.backend.routers")
 
 
 @app.exception_handler(Exception)
@@ -139,7 +116,7 @@ def root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
-import os
+
 
 if __name__ == "__main__":
     import uvicorn
@@ -149,4 +126,3 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 10000)),
     )
-
