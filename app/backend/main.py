@@ -106,7 +106,7 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
             app.include_router(module.router)
             logger.info("Included router: %s.router", module_name)
 setup_logging()
-include_routers_from_package(app, "routers")
+include_routers_from_package(app, "app.backend.routers")
 
 
 @app.exception_handler(Exception)
