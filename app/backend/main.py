@@ -109,9 +109,11 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
 
     discovered = 0
 
-   for _, module_name, is_pkg in pkgutil.walk_packages(pkg.__path__, pkg.__name__ + "."):
-    if is_pkg:
-        continue
+    for _, module_name, is_pkg in pkgutil.walk_packages(
+        pkg.__path__, pkg.__name__ + "."
+    ):
+        if is_pkg:
+            continue
 
     try:
         module = importlib.import_module(module_name)
