@@ -113,11 +113,14 @@ def include_routers_from_package(app: FastAPI, package_name: str = "routers") ->
         if is_pkg:
             continue
 
-        try:
-            module = importlib.import_module(module_name)
-        except Exception as exc:
-            logger.warning("Failed to import module '%s': %s", module_name, exc)
-            continue
+       import traceback
+
+try:
+    module = importlib.import_module(module_name)
+except Exception as exc:
+    logger.warning("Failed to import module '%s': %s", module_name, exc)
+    traceback.print_exc()
+    continue
 
         for attr_name in ("router", "admin_router"):
             if not hasattr(module, attr_name):
