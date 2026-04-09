@@ -1,3 +1,4 @@
+print("AUTH ROUTER FILE LOADED")
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
