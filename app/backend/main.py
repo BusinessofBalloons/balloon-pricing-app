@@ -85,9 +85,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-from app.backend.routers.auth import router as auth_router
-app.include_router(auth_router)
-
 # MODULE_MIDDLEWARE_START
 app.add_middleware(
     CORSMiddleware,
