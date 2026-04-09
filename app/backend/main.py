@@ -82,7 +82,7 @@ app.add_middleware(
 def include_routers_from_package(app: FastAPI, package_name: str = "routers") -> None:
     logger = logging.getLogger(__name__)
 
-    try:
+try:
     pkg = importlib.import_module(package_name)
     logger.info("PACKAGE IMPORTED: %s", package_name)
 except Exception as exc:
